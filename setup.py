@@ -1,11 +1,11 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
-setuptools.setup(
+setup(
     name="wikionary",
-    version="1.2.0",
+    version="1.2.1",
     author="Maehdakvan",
     author_email="visitanimation@google.com",
     description="Модуль для поиска Синонимов, Антонимов и т.д.",
@@ -20,7 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["wikionary"],
-    install_requires=['requests', 'lxml'],
+    packages=find_packages(),
+    install_requires=['requests', 'lxml', 'pymorphy2'],
     python_requires=">=3.6"
 )

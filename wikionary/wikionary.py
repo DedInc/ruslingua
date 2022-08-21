@@ -1,13 +1,13 @@
 from lxml import html, etree
+from pymorphy2 import MorphAnalyzer
 from requests import get
 from urllib.parse import unquote
 
-agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
-
+agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
+headers = {'User-Agent': agent}
 
 def getSynonims(word):
     syns = []
-    headers = {'User-Agent': agent}
     tree = html.fromstring(get(
         'https://jeck.ru/tools/SynonymsDictionary/{}'.format(word), headers=headers).content)
     urls = tree.xpath('//td/a/@href')
@@ -22,7 +22,6 @@ def getSynonims(word):
 
 def getAntonyms(word):
     antonyms = []
-    headers = {'User-Agent': agent}
     tree = html.fromstring(
         get('https://ru.wiktionary.org/wiki/{}'.format(word), headers=headers).content)
     for k in range(1, 100):
@@ -38,7 +37,6 @@ def getAntonyms(word):
 
 def getPhraseologs(word):
     phraseols = []
-    headers = {'User-Agent': agent}
     tree = html.fromstring(
         get('https://ru.wiktionary.org/wiki/{}'.format(word), headers=headers).content)
     for k in range(1, 100):
@@ -54,7 +52,6 @@ def getPhraseologs(word):
 
 
 def getRandomWord():
-    headers = {'User-Agent': agent}
     tree = html.fromstring(
         get('https://ru.wiktionary.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0', headers=headers).content)
     return tree.xpath('/html/body/div[3]/h1/text()')[0]
@@ -62,7 +59,6 @@ def getRandomWord():
 
 def getAssociations(word):
     assocs = []
-    headers = {'User-Agent': agent}
     tree = html.fromstring(get(
         'https://wordassociations.net/ru/%D0%B0%D1%81%D1%81%D0%BE%D1%86%D0%B8%D0%B0%D1%86%D0%B8%D0%B8-%D0%BA-%D1%81%D0%BB%D0%BE%D0%B2%D1%83/{}'.format(word), headers=headers).content)
     urls = tree.xpath('//li/a/@href')
@@ -73,7 +69,6 @@ def getAssociations(word):
 
 
 def getHyperonims(word):
-    headers = {'User-Agent': agent}
     tree = html.fromstring(
         get('https://ru.wiktionary.org/wiki/{}'.format(word), headers=headers).content)
     phraseols = []
@@ -86,3 +81,26 @@ def getHyperonims(word):
             except:
                 break
     return list(dict.fromkeys(phraseols))
+
+def checkWord(diction, word):
+    keys = list(diction.keys())
+    for key in keys:
+        if diction[key] == word:
+            return True
+    return False
+
+def inflectWord(word):
+    inflected = {}
+
+    morph = MorphAnalyzer()
+    p = morph.parse(word)[0]
+    types = ('nomn', 'gent', 'datv', 'accs', 'ablt', 'loct', 'voct', 'gen2', 'acc2', 'loc2')
+    for t in types:
+        a = p.inflect({t})
+        try:
+            if not checkWord(inflected, a.word):
+                inflected[t] = a.word
+        except:
+            return {}
+
+    return inflected
