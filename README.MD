@@ -1,18 +1,68 @@
-<h1 align="center">wikionary - Модуль для поиска Синонимов, Антонимов и т.д.</h1>
+# RusLingua 📚
 
-<br>
+RusLingua is a Python library for retrieving various linguistic information about Russian words. It provides a simple API to get synonyms, antonyms, word associations, cognate words, and definitions.
 
-<h1 align="center"> -Как это работает?- </h1>
+## Features
+
+- Get synonyms of a word 👥
+- Get antonyms of a word 👎
+- Get word associations 💭
+- Get cognate words (words with a common root) 🌳
+- Get definitions from dictionaries 📖
+
+## Quickstart
 
 ```python
-import wikionary as w
+from ruslingua import RusLingua
 
-print(w.getSynonims('привет')) #Найти синонимы к слову привет
-print(w.getAntonyms('привет')) #Найти антонимы к слову привет
-print(w.getPhraseologs('привет')) #Найти фразеологизмы к слову привет
-print(w.getHyperonims('привет')) #Найти гиперонимы к слову привет
-print(w.getAssociations('привет')) #Найти ассоциации к слову привет
-print(w.getRandomWord()) #Найти случайное слово
+ruslingua = RusLingua()
 
-print(w.inflectWord('привет')) #Сделать разбор по падежам
+synonyms = ruslingua.get_synonyms('дом')
+antonyms = ruslingua.get_antonyms('дом')
+associations = ruslingua.get_associations('дом')
+cognates = ruslingua.get_cognate_words('дом')  
+definition = ruslingua.get_definition('дом')
+
+print(synonyms)  
+print(antonyms)
+print(associations)
+print(cognates)
+print(definition)
 ```
+
+## Installation 
+
+```
+pip install ruslingua
+```
+
+## Usage
+
+Import the RusLingua class and instantiate it:
+
+```python
+from ruslingua import RusLingua
+
+ruslingua = RusLingua()
+```
+
+Then call the methods with a word to get the linguistic information:
+
+```python 
+synonyms = ruslingua.get_synonyms('дом')
+antonyms = ruslingua.get_antonyms('дом')
+associations = ruslingua.get_associations('дом')
+cognates = ruslingua.get_cognate_words('дом')
+definition = ruslingua.get_definition('дом') 
+```
+
+The methods return lists of strings.
+
+## Credits 
+
+RusLingua retrieves data from various sources:
+
+- [jeck.ru](https://jeck.ru) - synonyms 👥
+- [razbiraem-slovo.ru](https://razbiraem-slovo.ru) - antonyms 👎 and cognate words 🌳
+- [wordassociations.net](https://wordassociations.net) - word associations 💭
+- [gramota.ru](https://gramota.ru) - definitions 📖

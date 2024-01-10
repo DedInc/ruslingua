@@ -1,0 +1,1 @@
+from .ruslingua import RusLingua
