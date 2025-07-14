@@ -1,1 +1,3 @@
-from .ruslingua import RusLingua
+from .ruslingua import RusLingua, AsyncRusLingua
+
+__all__ = ['RusLingua', 'AsyncRusLingua']
